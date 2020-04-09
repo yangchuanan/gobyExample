@@ -6,6 +6,8 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 func check(e error) {
@@ -55,7 +57,7 @@ func readFileDemo() {
 
 }
 
-func main() {
+func writeFileDemo() {
 	d1 := []byte("hello\ngo\n")
 	err := ioutil.WriteFile("D:\\GoProject\\gobyExample\\writeFile.txt", d1, 0644)
 	check(err)
@@ -79,5 +81,42 @@ func main() {
 	fmt.Printf("wrote %d bytes\n", n4)
 	//使用 Flush 来确保，已将所有的缓冲操作应用于底层 writer。
 	w.Flush()
+}
+
+func filepathDemo() {
+	p := filepath.Join("dir1", "dir2", "filename")
+	fmt.Println("p:", p)
+
+	fmt.Println(filepath.Join("dir1//", "filename"))
+	fmt.Println(filepath.Join("dir1/../dir1", "filename"))
+
+	fmt.Println("Dir(p):", filepath.Dir(p))
+	fmt.Println("Base(p):", filepath.Base(p))
+
+	fmt.Println(filepath.IsAbs("dir/file"))
+	fmt.Println(filepath.IsAbs("/dir/file"))
+	filename := "config.json"
+	ext := filepath.Ext(filename)
+	fmt.Println(ext)
+
+	fmt.Println(strings.TrimSuffix(filename, ext))
+
+	// 寻找相对路径
+	rel, err := filepath.Rel("a/b", "a/b/t/file")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(rel)
+	rel, err = filepath.Rel("a/b", "a/c/t/file")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(rel)
+
+	rel, err = filepath.Rel("c/b", "a/c/t/file")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(rel)
 
 }
